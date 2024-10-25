@@ -4,9 +4,11 @@ import { fileURLToPath } from 'url';
 import sqlite3 from 'sqlite3';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 const app = express();
+app.use(cookieParser())
 
 // Middleware untuk parsing body request
 app.use(express.urlencoded({ extended: true })); // Parsing application/x-www-form-urlencoded
