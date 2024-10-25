@@ -1,22 +1,16 @@
 <script setup>
 import { ref } from 'vue';
 import CommentSection from './components/CommentSection.vue';
+import DOMPurify from 'dompurify';
+
 
 const userId = ref('');
 const users = ref(null);
 const newEmail = ref('');
 const apiUrl = `${import.meta.env.VITE_API_URL}`;
 
-const sanitizeHTML = (htmlString) => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlString, 'text/html');
-  const allowedTags = ['b', 'i', 'em', 'strong', 'a', 'p', 'div', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li'];
-  doc.body.querySelectorAll('*').forEach((element) => {
-    if (!allowedTags.includes(element.tagName.toLowerCase())) {
-      element.remove();
-    }
-  });
-  return doc.body.innerHTML;
+const sanitizeHTML = (inputHtml) => {
+    return DOMPurify.sanitize(inputHtml);
 };
 
 const getUser = async () => {
