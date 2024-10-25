@@ -7,7 +7,7 @@ import DOMPurify from 'dompurify';
 const userId = ref('');
 const users = ref(null);
 const newEmail = ref('');
-const apiUrl = `${import.meta.env.VITE_API_URL}`;
+const apiUrl = `${import.meta.env.VITE_HOST}`;
 
 const sanitizeHTML = (inputHtml) => {
     return DOMPurify.sanitize(inputHtml);
@@ -15,12 +15,6 @@ const sanitizeHTML = (inputHtml) => {
 
 const getUser = async () => {
   try {
-    const userIdValue = userId.value.trim();
-    if (!/^\d+$/.test(userIdValue)) {  
-      alert("Please enter a valid numeric user ID");
-      return;
-    }
-
     const response = await fetch(`${apiUrl}/api/user/${userId.value}`);
     
     if (!response.ok) {
