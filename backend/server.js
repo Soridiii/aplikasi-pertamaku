@@ -9,12 +9,9 @@ dotenv.config();
 
 const app = express();
 app.use(cookieParser())
+app.use(express.urlencoded({ extended: true })); 
+app.use(express.json()); 
 
-// Middleware untuk parsing body request
-app.use(express.urlencoded({ extended: true })); // Parsing application/x-www-form-urlencoded
-app.use(express.json()); // Parsing application/json
-
-// CORS middleware
 app.use(cors({
   origin: function (origin, callback) {
     const allowedOrigins = [process.env.ALLOWED_ORIGIN];
@@ -27,7 +24,6 @@ app.use(cors({
   optionsSuccessStatus: 200,
 }));
 
-// Middleware akses berdasarkan hostname
 app.use((req, res, next) => {
   const allowedHostname = process.env.ALLOWED_HOSTNAME;
   if (req.hostname === allowedHostname && (req.path.startsWith('/pinceng') || req.path.startsWith('/api'))) {
