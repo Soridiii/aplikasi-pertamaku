@@ -5,9 +5,9 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  base: `/${process.env.VITE_USER_NAME}/`,
+  base: `/salinggih/`,
   server: {
-    host: '0.0.0.0',
+    host: true,
     port: 5173
   }
 })
