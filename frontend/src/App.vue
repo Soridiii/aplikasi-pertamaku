@@ -5,21 +5,69 @@ import CommentSection from './components/CommentSection.vue';
 const userId = ref('');
 const users = ref(null);
 const newEmail = ref('');
+const apiUrl = `${import.meta.env.VITE_API_URL}`;
 
-const getUser = async () => {
-  const response = await fetch(`http://localhost:3000/api/user/${userId.value}`);
-  users.value = await response.json();
+const sanitizeHTML = (htmlString) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, 'text/html');
+  const allowedTags = ['b', 'i', 'em', 'strong', 'a', 'p', 'div', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li'];
+  doc.body.querySelectorAll('*').forEach((element) => {
+    if (!allowedTags.includes(element.tagName.toLowerCase())) {
+      element.remove();
+    }
+  });
+  return doc.body.innerHTML;
 };
 
+const getUser = async () => {
+  try {
+    const userIdValue = userId.value.trim();
+    if (!/^\d+$/.test(userIdValue)) {  
+      alert("Please enter a valid numeric user ID");
+      return;
+    }
+
+    const response = await fetch(`${apiUrl}/api/user/${userId.value}`);
+    
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status} - ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.length === 0) {
+      alert("No user found with the given ID");
+      return;
+    }
+
+    users.value = data;
+
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    alert("An error occurred while fetching the user data. Please try again later.");
+  }
+};
+
+
+
 const changeEmail = async () => {
-  await fetch('http://localhost:3000/api/change-email', {
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail.value);
+  if (!validEmail) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+  await fetch(`${apiUrl}/api/user/${userId.value}/change-email`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: `email=${newEmail.value}`,
+    body: new URLSearchParams({
+      email: sanitizeHTML(newEmail.value),
+    }).toString(),
   });
 };
+
 </script>
 
 <template>

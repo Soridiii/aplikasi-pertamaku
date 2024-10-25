@@ -1,3 +1,4 @@
+
 {
   "name": "frontend",
   "private": true,
@@ -9,7 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.4.37"
+    "vue": "^3.4.37",
+    "dompurify": "^2.3.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
