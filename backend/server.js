@@ -26,7 +26,7 @@ app.use(cors({
 
 app.use((req, res, next) => {
   const allowedHostname = process.env.ALLOWED_HOSTNAME;
-  if (req.hostname === allowedHostname && (req.path.startsWith('/pinceng') || req.path.startsWith('/api'))) {
+  if (req.hostname === allowedHostname && (req.path.startsWith('/salinggih') || req.path.startsWith('/api'))) {
     next();
   } else {
     res.status(403).send('Access denied');
